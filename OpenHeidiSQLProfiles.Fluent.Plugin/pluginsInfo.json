@@ -1,0 +1,11 @@
+{
+	"IsEnabled": true,
+	"InstalledVersion": "1.0.0.0",
+	"Name": "Open HeidiSQL Profiles",
+	"DisplayName": "Open HeidiSQL Profiles",
+	"Description": "Search and open HeidiSQL database connection profiles.",
+	"PublisherName": "zlyfer",
+	"Version": "1.0.0.0",
+	"URL": "https://github.com/zlyfer/OpenHeidiSQLProfiles.Fluent.Plugin",
+	"IconGlyph": "\uf003"
+}

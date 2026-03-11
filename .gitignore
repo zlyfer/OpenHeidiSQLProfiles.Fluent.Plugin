@@ -1,0 +1,11 @@
+# Build results
+bin/
+obj/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Custom
+install.ps1
