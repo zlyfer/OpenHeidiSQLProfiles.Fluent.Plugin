@@ -1,8 +1,7 @@
 # OpenHeidiSQLProfiles
 
-An app for [Fluent Search](https://github.com/adirh3/Fluent-Search) to quickly open saved HeidiSQL profiles.
+A [Fluent Search](https://github.com/adirh3/Fluent-Search) app to `Search and open HeidiSQL database connection profiles.`
 
 ## Showcase
 
 ![Showcase Gif](media/showcase.gif)
-
