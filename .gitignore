@@ -6,6 +6,3 @@ obj/
 .DS_Store
 Thumbs.db
 Desktop.ini
-
-# Custom
-install.ps1
