@@ -1,6 +1,6 @@
 # OpenHeidiSQLProfiles
 
-A [Fluent Search](https://github.com/adirh3/Fluent-Search) app to `Search and open HeidiSQL database connection profiles.`
+A [Fluent Search](https://github.com/adirh3/Fluent-Search) plugin to `Search and open HeidiSQL database connection profiles.`
 
 ## Showcase
 
