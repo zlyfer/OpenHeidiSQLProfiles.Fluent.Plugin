@@ -1,5 +1,6 @@
 using Blast.API.Core.Processes;
 using Blast.API.Processes;
+using Blast.API.Settings;
 using Blast.Core;
 using Blast.Core.Interfaces;
 using Blast.Core.Objects;
@@ -24,6 +25,7 @@ namespace OpenHeidiSQLProfiles.Fluent.Plugin
         private readonly List<ISearchOperation> _supportedOperations;
         private List<string> _profileNames = new();
         private string _heidiSqlPath;
+        private readonly HeidiSQLSettingsPage _settingsPage;
 
         public OpenHeidiSQLProfilesSearchApp()
         {
@@ -43,15 +45,24 @@ namespace OpenHeidiSQLProfiles.Fluent.Plugin
                 MinimumSearchLength = 1,
                 IsProcessSearchEnabled = false,
                 IsProcessSearchOffline = true,
-                ApplicationIconGlyph = "\uf003",
+                ApplicationIconGlyph = "\uEE94",
                 SearchAllTime = ApplicationSearchTime.Fast,
                 DefaultSearchTags = _searchTags
             };
+
+            _settingsPage = new HeidiSQLSettingsPage(_applicationInfo);
+            _applicationInfo.SettingsPage = _settingsPage;
         }
 
         public ValueTask LoadSearchApplicationAsync()
         {
-            _heidiSqlPath = GetHeidiSQLPath();
+            _heidiSqlPath = GetHeidiSQLPath(_settingsPage.HeidiSQLPath);
+
+            if (!string.IsNullOrEmpty(_heidiSqlPath) && string.IsNullOrWhiteSpace(_settingsPage.HeidiSQLPath))
+            {
+                _settingsPage.HeidiSQLPath = _heidiSqlPath;
+            }
+
             return ValueTask.CompletedTask;
         }
 
@@ -97,7 +108,7 @@ namespace OpenHeidiSQLProfiles.Fluent.Plugin
                         _supportedOperations,
                         _searchTags)
                     {
-                        IconGlyph = "\uf003"
+                        IconGlyph = "\uEE94"
                     };
                 }
             }
@@ -179,8 +190,34 @@ namespace OpenHeidiSQLProfiles.Fluent.Plugin
         /// <summary>
         /// Find HeidiSQL exe.
         /// </summary>
-        private static string GetHeidiSQLPath()
+        private static string GetHeidiSQLPath(string configuredPath)
         {
+            if (!string.IsNullOrWhiteSpace(configuredPath))
+            {
+                string expandedPath = Environment.ExpandEnvironmentVariables(configuredPath.Trim().Trim('"'));
+
+                if (Directory.Exists(expandedPath))
+                {
+                    string exePath = Path.Combine(expandedPath, "heidisql.exe");
+                    if (File.Exists(exePath))
+                    {
+                        return exePath;
+                    }
+                }
+
+                if (File.Exists(expandedPath))
+                {
+                    return expandedPath;
+                }
+
+                if (!Path.IsPathRooted(expandedPath) &&
+                    !expandedPath.Contains(Path.DirectorySeparatorChar) &&
+                    !expandedPath.Contains(Path.AltDirectorySeparatorChar))
+                {
+                    return expandedPath;
+                }
+            }
+
             string[] possiblePaths = new[]
             {
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "HeidiSQL", "heidisql.exe"),
@@ -196,7 +233,7 @@ namespace OpenHeidiSQLProfiles.Fluent.Plugin
                 }
             }
 
-            return "heidisql.exe";
+            return string.Empty;
         }
     }
 }
